@@ -11,6 +11,12 @@ Arduino   VL6180X board
     SCL - SCL
 */
 
+#define PIN_FREQ 4
+#define DIST_MIN 0
+#define DIST_MAX 200
+#define FREQ_MIN 33
+#define FREQ_MAX 1023
+
 VL6180X sensor;
 
 void setup() 
@@ -24,7 +30,10 @@ void setup()
 
 void loop() 
 { 
-  Serial.print(sensor.readRangeSingleMillimeters());
+  uint16_t sensorValue = sensor.readRangeSingleMillimeters();
+  uint16_t freq = map(sensorValue, DIST_MIN, DIST_MAX, FREQ_MIN, FREQ_MAX);
+  tone(PIN_FREQ, freq);
+  Serial.print(sensorValue);
   if (sensor.timeoutOccurred()) { Serial.print(" TIMEOUT"); }
   Serial.println();
 }
